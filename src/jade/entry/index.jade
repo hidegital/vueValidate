@@ -1,0 +1,280 @@
+- var siteTitle    = ''
+- var keywords     = ''
+- var description  = ''
+- var headdingLogo = 'div class="sp-header"'
+- var domain       = '../'
+doctype html
+html(lang="ja")
+    head
+        include ../_partial/_headTxtNoScable
+        script(src='#{domain}/js/lib/bundle.min.js')
+    body
+        .navBox-sp
+            include ../_partial/_spHeader
+        .wrapBox.flex
+            .navBox
+                include ../_partial/_pcHeader
+            section.mainBox.bgBeige
+                include ../_partial/_toTop
+                .contentBox
+                    h1.contentBox_primary-title-txtBase エントリー/お問い合わせ
+                    h2.contentBox_secondary-title-txtBase
+                        |下記フォームに必要事項をご記入の上、[確認]ボタンをクリックしてください。
+                        span ＊
+                        |は必須項目です。
+                    form(id="form-entry" name="form-entry" method="post" action="mail.php" novalidate="novalidate")
+                        .contentBox_table
+                            .contentBox_table_block
+                                .contentBox_table_blockL
+                                    h3 お問い合わせ内容
+                                    span *
+                                .contentBox_table_blockR
+                                    p.form_radio_block(data-trigger-formradio='trigger')
+                                        //@TODO hrefに#でisname,isblog,isotherを含める
+                                        input(type="radio" name="問い合わせカテゴリー" value="エントリー" id="name" data-trigger-form01='trigger' checked)
+                                        label(for="name") エントリー
+                                        input(type="radio" name="問い合わせカテゴリー" value="hoge" id="blog" data-trigger-form02='trigger')
+                                        label(for="blog") しぶちゃんねるQ&A
+                                        input(type="radio" name="問い合わせカテゴリー" value="その他お問い合わせ" id="other" data-trigger-form03='trigger')
+                                        label(for="other") その他お問い合わせ
+                            //エントリーform
+                            .contentBox_table-changeForm(data-target-form ='target' id="nameForm" v-on='change:onCheckFlg')
+                                .contentBox_table_block
+                                    .contentBox_table_blockL
+                                        h3 お名前
+                                        span *
+                                    .contentBox_table_blockR
+                                        input(type='text', name="お名前" id="name" class="text-field" maxlength="50" v-model='name', v-on='change:onCheckName', v-validate='required')
+                                        .validation
+                                            span(v-if='validation.name.required && !checkFlg.name') お名前を入力してください
+                                .contentBox_table_block
+                                    .contentBox_table_blockL
+                                        h3 フリガナ
+                                        span *
+                                    .contentBox_table_blockR
+                                        input(type='text' name="フリガナ" id="kana" class="text-field" maxlength="50" v-model='kana' v-on='change:onCheckKana'  v-validate='required,zenkakuKatakana')
+                                        .validation
+                                            span(v-if='validation.kana.required && !checkFlg.kana') フリガナを入力してください
+                                            span(v-if='validation.kana.zenkakuKatakana && validation.kana.dirty') 全角カタカナを入力してください
+                                .contentBox_table_block
+                                    .contentBox_table_blockL
+                                        h3 E-mail
+                                        span *
+                                    .contentBox_table_blockR
+                                        input(type='email',name="メールアドレス" id="mail" class="text-field" maxlength="50" v-model='email',v-on='change:onCheckMail' v-validate='required, email' placeholder='taro_wiz@012grp.co.jp')
+                                        .validation
+                                            span(v-if="validation.email.required && !checkFlg.email") メールアドレスは必須です
+                                            span(v-if='validation.email.email && validation.email.dirty') メールアドレスの形式が不正です！
+                                .contentBox_table_block
+                                    .contentBox_table_blockL
+                                        h3 電話番号
+                                        span *
+                                    .contentBox_table_blockR
+                                        input(type='text',name="電話番号" id="tell" class="text-field-s" maxlength="20" v-model='tel',v-on='change:onCheckTel' v-validate='required, isNum' placeholder="")
+                                        .validation
+                                            span(v-if='validation.tel.required && !checkFlg.tel') 電話番号は必須です
+                                            span(v-if='validation.tel.isNum && validation.tel.dirty') 数値を入力して下さい
+                                .contentBox_table_block
+                                    .contentBox_table_blockL
+                                        h3 都道府県
+                                    .contentBox_table_blockR
+                                        label.select-wrap(data-target-focus = 'target' for="pref")
+                                            select(name="都道府県",class='select' id="pref" v-model='selectPref')
+                                                option(value="" ,selected) 都道府県
+                                                option(value="北海道") 北海道
+                                                option(value="青森県") 青森県
+                                                option(value="岩手県") 岩手県
+                                                option(value="宮城県") 宮城県
+                                                option(value="秋田県") 秋田県
+                                                option(value="山形県") 山形県
+                                                option(value="福島県") 福島県
+                                                option(value="茨城県") 茨城県
+                                                option(value="栃木県") 栃木県
+                                                option(value="群馬県") 群馬県
+                                                option(value="埼玉県") 埼玉県
+                                                option(value="千葉県") 千葉県
+                                                option(value="東京都") 東京都
+                                                option(value="神奈川県") 神奈川県
+                                                option(value="新潟県") 新潟県
+                                                option(value="富山県") 富山県
+                                                option(value="石川県") 石川県
+                                                option(value="福井県") 福井県
+                                                option(value="山梨県") 山梨県
+                                                option(value="長野県") 長野県
+                                                option(value="岐阜県") 岐阜県
+                                                option(value="静岡県") 静岡県
+                                                option(value="愛知県") 愛知県
+                                                option(value="三重県") 三重県
+                                                option(value="滋賀県") 滋賀県
+                                                option(value="京都府") 京都府
+                                                option(value="大阪府") 大阪府
+                                                option(value="兵庫県") 兵庫県
+                                                option(value="奈良県") 奈良県
+                                                option(value="和歌山県") 和歌山県
+                                                option(value="鳥取県") 鳥取県
+                                                option(value="島根県") 島根県
+                                                option(value="岡山県") 岡山県
+                                                option(value="広島県") 広島県
+                                                option(value="山口県") 山口県
+                                                option(value="徳島県") 徳島県
+                                                option(value="香川県") 香川県
+                                                option(value="愛媛県") 愛媛県
+                                                option(value="高知県") 高知県
+                                                option(value="福岡県") 福岡県
+                                                option(value="佐賀県") 佐賀県
+                                                option(value="長崎県") 長崎県
+                                                option(value="熊本県") 熊本県
+                                                option(value="大分県") 大分県
+                                                option(value="宮崎県") 宮崎県
+                                                option(value="鹿児島県") 鹿児島県
+                                                option(value="沖縄県") 沖縄県
+                                .contentBox_table_block
+                                    .contentBox_table_blockL
+                                        h3 生年月日
+                                    .contentBox_table_blockR
+                                        input(type="text" name="生年月日" id="birthday" class="text-field-s" maxlength="20" placeholder="" v-model="birthday")
+                                .contentBox_table_block
+                                    .contentBox_table_blockL
+                                        h3 学校名
+                                        span *
+                                    .contentBox_table_blockR
+                                        input(type='text',name="学校" id="school" class="text-field" maxlength="50" v-model='school', v-on='change:onCheckSchool', v-validate='required')
+                                        .validation
+                                            span(v-if='validation.school.required && !checkFlg.school') 学校名を入力してください
+                                .contentBox_table_block
+                                    .contentBox_table_blockL
+                                        h3 学部/学科名
+                                        span *
+                                    .contentBox_table_blockR
+                                        input(type='text',name="学部/学科名" id="undergraduate" class="text-field" maxlength="50" v-model='undergraduate', v-on='change:onCheckUndergraduate', v-validate='required')
+                                        .validation
+                                            span(v-if='validation.undergraduate.required && !checkFlg.undergraduate') 学部/学科名を入力してください
+                                .contentBox_table_block
+                                    .contentBox_table_blockL
+                                        h3 卒業年度
+                                        span *
+                                    .contentBox_table_blockR
+                                        input(type="text" name="卒業年度" id="graduationyear" class="text-field-s" maxlength="20" v-model='graduation', v-on='change:onCheckGraduation', v-validate='required')
+                                        .validation
+                                            span(v-if='validation.graduation.required && !checkFlg.graduation') 卒業年度を入力してください
+                                .contentBox_table_block
+                                    .contentBox_table_blockL
+                                        h3 卒業見込み
+                                        span *
+                                    .contentBox_table_blockR
+                                        p
+                                            input(type="radio" name="卒業見込み" value="見込み" id="prospects" v-model="picked" checked)
+                                            label(for="prospects") 見込み
+                                            input(type="radio" name="卒業見込み" value="卒業" id="graduate" v-model="picked")
+                                            label(for="graduate") 卒業
+                                .contentBox_table_block
+                                    .contentBox_table_blockL
+                                        h3 希望職種
+                                        span *
+                                    .contentBox_table_blockR
+                                        label.select-wrap(data-target-focus='target' for="Jobcategory")
+                                            select(name="希望職種" id="Jobcategory" class='select' v-model='select' v-on='change:onCheckSelect' v-validate='required')
+                                                option(value="" ,selected) 選択してください
+                                                option(value="総合職") 総合職
+                                                option(value="事務職") 事務職
+                                                option(value="デザイナー") デザイナー
+                                                option(value="エンジニア") エンジニア
+                                        .validation(v-if='validation.select.required && !checkFlg.select')
+                                            span 希望職種は必須です
+                                .contentBox_table_block
+                                    .contentBox_table_blockL
+                                        h3 自己PR
+                                    .contentBox_table_blockR
+                                        textarea(cols="40" rows="7" name="自己PR" id="question" class="text-field-l" maxlength="500" v-model="pr")
+
+                                include ../_partial/_privacyPolicy
+                                a.square-button-confirm.disable(v-show="!valid")
+                                    span 確認
+                                a.square-button-confirm(data-remodal-target="entryFormModal" v-show="valid")
+                                    span 確認
+                                include ../_partial/_remodal-entry-form
+
+                            //Q&A
+                            .contentBox_table-changeForm(data-target-form ='target' id="blogForm" v-on='change:onBlogCheckFlg')
+                                .contentBox_table_block
+                                    .contentBox_table_blockL
+                                        h3 お名前
+                                        span *
+                                    .contentBox_table_blockR
+                                        input(type='text', name="お名前" id="name" class="text-field" v-model='name' v-on='change:onBlogCheckName' v-validate='required')
+                                        .validation
+                                            span(v-if='validation.name.required && !blogCheckFlg.name') お名前を入力してください
+                                .contentBox_table_block
+                                    .contentBox_table_blockL
+                                        h3 質問内容
+                                        span *
+                                    .contentBox_table_blockR
+                                        textarea(cols="40" rows="10" maxlength="500" name="質問内容" id="question" class="text-field-l" v-model='question' v-on='change:onBlogCheckQuestion' v-validate='required')
+                                        .validation
+                                            span(v-if='validation.question.required && !blogCheckFlg.question') 質問内容を入力して下さい
+
+                                include ../_partial/_privacyPolicy
+                                a.square-button-confirm.disable(v-show="!valid")
+                                    span 確認
+                                a.square-button-confirm(data-remodal-target="blogFormModal" v-show="valid")
+                                    span 確認
+
+                                include ../_partial/_remodal-blog-form
+
+                            //otherForm
+                            .contentBox_table-changeForm(data-target-form ='target' id="otherForm")
+                                .contentBox_table_block
+                                    .contentBox_table_blockL
+                                        h3 お名前
+                                        span *
+                                    .contentBox_table_blockR
+                                        input(type='text', name="お名前" id="name" class="text-field" v-model='name' v-on='change:onOtherCheckName' v-validate='required')
+                                        .validation
+                                            span(v-if='validation.name.required && !otherCheckFlg.name') お名前を入力してください
+                                .contentBox_table_block
+                                    .contentBox_table_blockL
+                                        h3 フリガナ
+                                        span *
+                                    .contentBox_table_blockR
+                                        input(type='text' name="フリガナ" id="kana" class="text-field" maxlength="50" v-model='kana' v-on='change:onOtherCheckKana'  v-validate='required,zenkakuKatakana')
+                                        .validation
+                                            span(v-if='validation.kana.required && !otherCheckFlg.kana') フリガナを入力してください
+                                            span(v-if='validation.kana.zenkakuKatakana && validation.kana.dirty') 全角カタカナを入力してください
+                                .contentBox_table_block
+                                    .contentBox_table_blockL
+                                        h3 E-mail
+                                        span *
+                                    .contentBox_table_blockR
+                                        input(type='email',name="メールアドレス" id="mail" class="text-field" maxlength="50" v-model='email',v-on='change:onOtherCheckMail' v-validate='required, email' placeholder='taro_wiz@012grp.co.jp')
+                                        .validation
+                                            span(v-if="validation.email.required && !otherCheckFlg.email") メールアドレスは必須です
+                                            span(v-if='validation.email.email && validation.email.dirty') メールアドレスの形式が不正です！
+                                .contentBox_table_block
+                                    .contentBox_table_blockL
+                                        h3 電話番号
+                                        span *
+                                    .contentBox_table_blockR
+                                        input(type='text',name="電話番号" id="tell" class="text-field-s" maxlength="20" v-model='tel',v-on='change:onOtherCheckTel' v-validate='required, isNum' placeholder="0359402801")
+                                        .validation
+                                            span(v-if='validation.tel.required && !otherCheckFlg.tel') 電話番号は必須です
+                                            span(v-if='validation.tel.isNum && validation.tel.dirty') 数値を入力して下さい
+                                .contentBox_table_block
+                                    .contentBox_table_blockL
+                                        h3 お問い合わせ
+                                        span *
+                                    .contentBox_table_blockR
+                                        textarea(cols="40" rows="10" maxlength="500" name="質問内容" id="question" class="text-field-l" v-model='question' v-on='change:onOtherCheckQuestion' v-validate='required')
+                                        .validation
+                                            span(v-if='validation.question.required && !otherCheckFlg.question') お問い合わせ内容を入力して下さい
+                                include ../_partial/_privacyPolicy
+                                a.square-button-confirm.disable(v-show="!valid")
+                                    span 確認
+                                a.square-button-confirm(data-remodal-target="otherFormModal" v-show="valid")
+                                    span 確認
+                                include ../_partial/_remodal-other-form
+                footer.flex
+                    p &copy;2015 Wiz Co.,Ltd.
+    script(src='#{domain}js/app.js')
+    script(src='#{domain}js/vue.js')
+    script(src='#{domain}js/vue-validator.js')
+    script(src='#{domain}js/vue_form_valid.js')
